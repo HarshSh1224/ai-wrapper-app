@@ -9,7 +9,10 @@ function App() {
     <div className="app">
       {/* Sidebar */}
       <div className="sidebar">
-        <div className="chat-list" style={{ display: "flex", flexDirection: "column", gap:0}}>
+        <div
+          className="chat-list"
+          style={{ display: "flex", flexDirection: "column", gap: 0 }}
+        >
           <h2>ChatGPT Wrapper</h2>
           <p>Hey How Are you 1</p>
           <p>Hey How Are you 2</p>
@@ -20,11 +23,18 @@ function App() {
       </div>
       {/* Main Chat Area */}
       <div className="chat">
-        {/* Messages */}
         <div className="messages">
-          <div className="message received">Hello 👋</div>
-          <div className="message sent">Hi!</div>
-          <div className="message received">This is a dark theme chat UI.</div>
+          {messageList.map((message) => {
+            return (
+              <div
+                className={
+                  message.sentBy === "ai" ? "message received" : "message sent"
+                }
+              >
+                {message.content}
+              </div>
+            );
+          })}
         </div>
 
         {/* Input */}
@@ -35,7 +45,24 @@ function App() {
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
           />
-          <button>Send</button>
+          <button
+            onClick={async () => {
+              const newItem = { content: userInput, sentBy: "user" };
+              setMessageList((prev) => [...prev, newItem]);
+              setUserInput("")
+
+              // SEND TO BACKEND FOR RESPONSE
+
+              const response = await fetch("URL", );
+
+              const backendResponse = response.data.message
+              const aiResponse = { content: backendResponse, sentBy: "ai" };
+              setMessageList((prev) => [...prev, aiResponse]);
+
+            }}
+          >
+            Send
+          </button>
         </div>
       </div>
     </div>
