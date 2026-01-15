@@ -49,16 +49,26 @@ function App() {
             onClick={async () => {
               const newItem = { content: userInput, sentBy: "user" };
               setMessageList((prev) => [...prev, newItem]);
-              setUserInput("")
+              setUserInput("");
 
               // SEND TO BACKEND FOR RESPONSE
 
-              const response = await fetch("URL", );
+              const response = await fetch("http://localhost:5500/chat", {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  message: userInput,
+                }),
+              });
 
-              const backendResponse = response.data.message
+              const status = response.status;
+              const json = await response.json();
+
+              const backendResponse = json.responseMessage;
               const aiResponse = { content: backendResponse, sentBy: "ai" };
               setMessageList((prev) => [...prev, aiResponse]);
-
             }}
           >
             Send
